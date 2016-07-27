@@ -1,5 +1,6 @@
 var express = require('express');
 var passport = require('passport');
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 var router = express.Router();
 
 var env = {
@@ -8,9 +9,8 @@ var env = {
     AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback'
 };
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express', env: env });
+router.get('/', ensureLoggedIn, function(req, res, next) {
+    res.render('index', { title: 'Auth0 Client Rules', env: env });
 });
 
 router.get('/login',
@@ -24,7 +24,7 @@ router.get('/logout', function(req, res){
 });
 
 router.get('/callback',
-	   passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
+	   passport.authenticate('auth0', { failureRedirect: '/login' }),
 	   function(req, res) {
 	       res.redirect(req.session.returnTo || '/user');
 	   });
