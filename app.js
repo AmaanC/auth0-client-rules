@@ -51,7 +51,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-    secret: strategy.clientSecret,
+    secret: process.env.AUTH0_CLIENT_SECRET,
     resave: true,
     saveUninitialized: true
 }));
