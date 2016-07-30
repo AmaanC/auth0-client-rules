@@ -29,15 +29,17 @@ ruleParser.getClientsAndRules = function() {
  * stored and categorized into an array that looks like the following:
  * [
  *     {
- *         clientName: 'Foo',
- *         clientID: 'xyzasdnmxk',
- *         rules: [{name: 'Whitelist for..', id: 'foobar123'}, ...]
+ *         ruleName: 'Whitelist for..',
+ *         ruleID: 'foobar123',
+ *         clients: [{clientName: 'Foo', clientID: 'xyzasdnmxk'}, ...]
  *     },
  *     ...
  * ]
  */
 ruleParser.categorizeClientRules = function(clients, rules) {
     const s = new Sandbox();
+    let categorizedArray = [];
+    let remainingPromises = [];
     // Build fake context objects that contain valid clientName's and
     // clientID's for the modified Rule script to use
     const fakeContexts = clients.map(function(client) {
@@ -69,10 +71,26 @@ ruleParser.categorizeClientRules = function(clients, rules) {
 	 })();
 	`;
 
-	s.run(testCode, function(output) {
-	    console.log(output);
-	});
+	let categorizedRuleObj = {
+	    ruleName: curRule.name,
+	    ruleID: curRule.id,
+	    clients: undefined
+	};
+	remainingPromises.push(
+	    new Promise(function(resolve, reject) {
+		s.run(testCode, function(output) {
+		    if (output.result) {
+			categorizedRuleObj.clients = output.result;
+		    }
+		    categorizedArray.push(categorizedRuleObj);
+		    resolve();
+		})
+	    })
+	);
     }
+    return Promise.all(remainingPromises).then(function() {
+	return categorizedArray;
+    });
 };
 
 module.exports = ruleParser;
@@ -80,7 +98,7 @@ module.exports = ruleParser;
 
 ruleParser.getClientsAndRules()
     .then(function([clients, rules]) {
-	ruleParser.categorizeClientRules(clients, rules);
+	return ruleParser.categorizeClientRules(clients, rules);
     })
     .then(function(categorizedArray) {
 	console.log(categorizedArray);
