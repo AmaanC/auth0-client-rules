@@ -5,7 +5,7 @@ const babel = require('babel-core');
 
 const AUTH0_APIV2_TOKEN = process.env.AUTH0_APIV2_TOKEN;
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
-const ruleParser = {};
+const ruleCategorizer = {};
 
 const management = new ManagementClient({
     token: AUTH0_APIV2_TOKEN,
@@ -15,7 +15,7 @@ const management = new ManagementClient({
 /* Simply uses the Auth0 Management APIv2 to fetch all clients and rules
  * Returns a Promise
  */
-ruleParser.getClientsAndRules = function() {
+ruleCategorizer.getClientsAndRules = function() {
     return Promise.all([management.getClients(), management.getRules()]);
 };
 
@@ -36,7 +36,7 @@ ruleParser.getClientsAndRules = function() {
  *     ...
  * ]
  */
-ruleParser.categorizeClientRules = function(clients, rules) {
+ruleCategorizer.categorizeClientRules = function(clients, rules) {
     const s = new Sandbox();
     let categorizedArray = [];
     let remainingPromises = [];
@@ -93,12 +93,12 @@ ruleParser.categorizeClientRules = function(clients, rules) {
     });
 };
 
-module.exports = ruleParser;
+module.exports = ruleCategorizer;
 
 
-ruleParser.getClientsAndRules()
+ruleCategorizer.getClientsAndRules()
     .then(function([clients, rules]) {
-	return ruleParser.categorizeClientRules(clients, rules);
+	return ruleCategorizer.categorizeClientRules(clients, rules);
     })
     .then(function(categorizedArray) {
 	console.log(categorizedArray);
