@@ -37,7 +37,6 @@ ruleCategorizer.getClientsAndRules = function() {
  * ]
  */
 ruleCategorizer.categorizeClientRules = function(clients, rules) {
-    const s = new Sandbox();
     let categorizedArray = [];
     let remainingPromises = [];
     // Build fake context objects that contain valid clientName's and
@@ -50,13 +49,14 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
     });
     
     for (let curRule of rules) {
+	let s = new Sandbox();
+
 	// Transform the code to something that will return `true` if
 	// any "special code" was executed for the client we passed
 	// and `false` otherwise
 	let newRuleCode = babel.transform('(' + curRule.script + ')', {
 	    plugins: ['../babel-rule/src/index.js']
 	}).code;
-	
 	let testCode = `
 	 (function() {
 	     let applicableClients = [];
@@ -67,7 +67,8 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 		     applicableClients.push(context);
 		 }
 	     });
-	     return applicableClients;
+	     postMessage(applicableClients);
+	     return true;
 	 })();
 	`;
 
@@ -78,13 +79,26 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 	};
 	remainingPromises.push(
 	    new Promise(function(resolve, reject) {
-		s.run(testCode, function(output) {
-		    if (output.result) {
-			categorizedRuleObj.clients = output.result;
-		    }
+		// First we'll attach a message handler for the sandboxed
+		// code to be able to send us the list of clients, and then
+		// we'll run it
+		s.on('message', function(message) {
+		    console.log('Message', message);
+		    categorizedRuleObj.clients = message;
 		    categorizedArray.push(categorizedRuleObj);
 		    resolve();
-		})
+		});
+		
+		s.run(testCode, function(output) {
+		    // If something went wrong, we'll leave the rule as
+		    // uncategorized. This will only happen if the transformed
+		    // Rule tried to run code it couldn't. (For example, code
+		    // from a require'd module or anything of that sort.)
+		    if (output.result !== 'true') {
+			categorizedRuleObj.clients = [];
+			resolve();
+		    }
+		});
 	    })
 	);
     }
@@ -94,12 +108,3 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 };
 
 module.exports = ruleCategorizer;
-
-
-ruleCategorizer.getClientsAndRules()
-    .then(function([clients, rules]) {
-	return ruleCategorizer.categorizeClientRules(clients, rules);
-    })
-    .then(function(categorizedArray) {
-	console.log(categorizedArray);
-    });
