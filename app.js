@@ -12,6 +12,7 @@ var Auth0Strategy = require('passport-auth0');
 dotenv.load();
 
 var routes = require('./routes/index');
+var apiRoutes = require('./routes/api');
 
 // This will configure Passport to use Auth0
 var strategy = new Auth0Strategy({
@@ -59,6 +60,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+app.use('/api/v1/', apiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
