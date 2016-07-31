@@ -10,7 +10,7 @@ var env = {
 };
 
 router.get('/', ensureLoggedIn, function(req, res, next) {
-    res.render('index', { title: 'Auth0 Client Rules', env: env });
+    res.render('index', { title: 'Auth0 Client Rules' });
 });
 
 router.get('/login',
