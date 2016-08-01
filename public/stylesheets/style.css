@@ -3,9 +3,17 @@ body {
     font: 2em "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+ul {
+    line-height: 1.4;
+}
+
 a {
     color: #00B7FF;
     text-decoration: none;
+}
+
+a:hover {
+    color: #0094CF;
 }
 
 a.disabled {
