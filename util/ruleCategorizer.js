@@ -55,7 +55,7 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 	// any "special code" was executed for the client we passed
 	// and `false` otherwise
 	let newRuleCode = babel.transform('(' + curRule.script + ')', {
-	    plugins: ['../babel-rule/src/index.js']
+	    plugins: ['transform-auth0-rule']
 	}).code;
 	let testCode = `
 	 (function() {
