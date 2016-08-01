@@ -1,9 +1,13 @@
 body {
-  padding: 50px;
-  font: 2em "Lucida Grande", Helvetica, Arial, sans-serif;
+    margin: 50px;
+    font: 2em "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
-  text-decoration: none;
+    color: #00B7FF;
+    text-decoration: none;
+}
+
+a.disabled {
+    color: #9E9E9E;
 }
