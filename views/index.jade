@@ -19,8 +19,8 @@ block content
             }).sort(function(rule1, rule2) {
               return parseInt(rule1.order, 10) - parseInt(rule2.order, 10);
             });
-        li(name=client.client_id)
-          a(href=CLIENT_BASE_URL + client.client_id + CLIENT_POSTFIX)
+        a(href=CLIENT_BASE_URL + client.client_id + CLIENT_POSTFIX)
+          li(name=client.client_id)
             = client.name
           ol
             each rule in rulesForClient
