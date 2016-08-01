@@ -1,5 +1,6 @@
 var express = require('express');
 var passport = require('passport');
+var ruleCategorizer = require('../util/ruleCategorizer');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 var router = express.Router();
 
@@ -10,13 +11,26 @@ var env = {
 };
 
 router.get('/', ensureLoggedIn, function(req, res, next) {
-    res.render('index', { title: 'Auth0 Client Rules' });
+    
+    ruleCategorizer.getClientsAndRules()
+	      .then(function([clients, rules]) {
+	          return ruleCategorizer.categorizeClientRules(clients, rules);
+	      })
+	      .then(function(categorizedObj) {
+	          res.render('index', {
+		            title: 'Auth0 Client Rules',
+		            categorizedObj: categorizedObj
+	          });
+	      })
+	      .catch(function(err) {
+	          res.json(err);
+	      });
 });
 
 router.get('/login',
-	   function(req, res){
-	       res.render('login', { env: env });
-	   });
+	         function(req, res){
+	             res.render('login', { env: env });
+	         });
 
 router.get('/logout', function(req, res){
     req.logout();
@@ -24,10 +38,10 @@ router.get('/logout', function(req, res){
 });
 
 router.get('/callback',
-	   passport.authenticate('auth0', { failureRedirect: '/login' }),
-	   function(req, res) {
-	       res.redirect(req.session.returnTo || '/user');
-	   });
+	         passport.authenticate('auth0', { failureRedirect: '/login' }),
+	         function(req, res) {
+	             res.redirect(req.session.returnTo || '/user');
+	         });
 
 
 module.exports = router;
