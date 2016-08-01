@@ -85,6 +85,8 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 	let categorizedRuleObj = {
 	    ruleName: curRule.name,
 	    ruleID: curRule.id,
+	    ruleOrder: curRule.order,
+	    ruleEnabled: Boolean(curRule.enabled),
 	    clients: undefined
 	};
 	remainingPromises.push(
