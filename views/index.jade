@@ -6,6 +6,7 @@ block content
     var RULE_BASE_URL = 'https://manage.auth0.com/#/rules/';
     var CLIENT_BASE_URL = 'https://manage.auth0.com/#/applications/';
     var CLIENT_POSTFIX = '/settings';
+  h1 Auth0 Clients and Rules
   div
     ul
       each client in categorizedObj.clients
@@ -23,7 +24,11 @@ block content
             = client.name
           ol
             each rule in rulesForClient
-              a(href=RULE_BASE_URL + rule.ruleID)
+              a(
+	        href=RULE_BASE_URL + rule.ruleID,
+		class=rule.ruleEnabled ? '' : 'disabled',
+		title=rule.ruleEnabled ? '' : 'Disabled rule'
+	      )
                 li
                   = rule.ruleName
         br
