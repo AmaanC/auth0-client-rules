@@ -19,6 +19,16 @@ ruleCategorizer.getClientsAndRules = function() {
     return Promise.all([management.getClients(), management.getRules()]);
 };
 
+/* This function is used to filter out the 'All Applications' client.
+ * The global property of a `client` indicates that the client is
+ * not one that the user made, but one that is used for testing
+ * all rules by clicking "Test all rules" in the Auth0 Dashboard.
+ * We want to exclude that to avoid confusing the user.
+ */
+const excludeGlobalClient = function(client) {
+    return !client.global;
+};
+
 /* Takes the API's responses for clients and rules as input and tries to
  * figure out which rules apply to which clients.
  * On a high level, this is done by using Babel to transform the Rule
@@ -43,7 +53,7 @@ ruleCategorizer.getClientsAndRules = function() {
 ruleCategorizer.categorizeClientRules = function(clients, rules) {
     // The object that the API is meant to return
     let apiObj = {
-	clients: clients,
+	clients: clients.filter(excludeGlobalClient),
 	rules: rules,
 	categorized: []
     };
@@ -51,13 +61,14 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 
     // Build fake context objects that contain valid clientName's and
     // clientID's for the modified Rule script to use
-    const fakeContexts = clients.map(function(client) {
-	return {
-	    clientName: client.name,
-	    clientID: client.client_id
-	};
-    });
-    
+    const fakeContexts = clients.filter(excludeGlobalClient).map(
+	function(client) {
+	    return {
+		clientName: client.name,
+		clientID: client.client_id
+	    };
+	});
+
     for (let curRule of rules) {
 	let s = new Sandbox();
 
