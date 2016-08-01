@@ -26,19 +26,29 @@ ruleCategorizer.getClientsAndRules = function() {
  * that can be actually executed with different spoofed `context`
  * objects in order to detect which clients it applies to.
  * The modified test code is run in a sandbox and the result is
- * stored and categorized into an array that looks like the following:
- * [
- *     {
- *         ruleName: 'Whitelist for..',
- *         ruleID: 'foobar123',
- *         clients: [{clientName: 'Foo', clientID: 'xyzasdnmxk'}, ...]
- *     },
- *     ...
- * ]
+ * stored and categorized into an object that looks like the following:
+ * {
+ *     clients: [{clientName: 'Foo', clientID: 'xyzasdnmxk'}, ...],
+ *     rules: [{ruleName: 'Whitelist for..', ruleID: 'foobar123'}, ...],
+ *     categorized: [
+ *         {
+ *             ruleName: 'Whitelist for..',
+ *             ruleID: 'foobar123',
+ *             clients: [{clientName: 'Foo', clientID: 'xyzasdnmxk'}, ...]
+ *         },
+ *         ...
+ *     ]
+ * }
  */
 ruleCategorizer.categorizeClientRules = function(clients, rules) {
-    let categorizedArray = [];
+    // The object that the API is meant to return
+    let apiObj = {
+	clients: clients,
+	rules: rules,
+	categorized: []
+    };
     let remainingPromises = [];
+
     // Build fake context objects that contain valid clientName's and
     // clientID's for the modified Rule script to use
     const fakeContexts = clients.map(function(client) {
@@ -85,7 +95,7 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 		s.on('message', function(message) {
 		    console.log('Message', message);
 		    categorizedRuleObj.clients = message;
-		    categorizedArray.push(categorizedRuleObj);
+		    apiObj.categorized.push(categorizedRuleObj);
 		    resolve();
 		});
 		
@@ -103,8 +113,9 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 	);
     }
     return Promise.all(remainingPromises).then(function() {
-	return categorizedArray;
+	return apiObj;
     });
 };
 
 module.exports = ruleCategorizer;
+
