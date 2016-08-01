@@ -2,5 +2,19 @@ extends layout
 
 block content
   
-  h1 Loading...
-  script(src='/scripts/index.js')
+  div
+    ul
+      each client in categorizedObj.clients
+        -
+          var rulesForClient = categorizedObj.categorized.filter(
+            function(ruleObj) {
+              return ruleObj.clients.some(function(clientObj) {
+                return clientObj.clientID === client.client_id;
+              })
+            });
+        - console.log(rulesForClient);
+        li
+          = client.name
+          ol
+            each rule in rulesForClient
+              li= rule.ruleName
