@@ -1,7 +1,11 @@
 extends layout
 
 block content
-  
+
+  -
+    var RULE_BASE_URL = 'https://manage.auth0.com/#/rules/';
+    var CLIENT_BASE_URL = 'https://manage.auth0.com/#/applications/';
+    var CLIENT_POSTFIX = '/settings';
   div
     ul
       each client in categorizedObj.clients
@@ -11,10 +15,15 @@ block content
               return ruleObj.clients.some(function(clientObj) {
                 return clientObj.clientID === client.client_id;
               })
+            }).sort(function(rule1, rule2) {
+              return parseInt(rule1.order, 10) - parseInt(rule2.order, 10);
             });
-        - console.log(rulesForClient);
-        li
-          = client.name
+        li(name=client.client_id)
+          a(href=CLIENT_BASE_URL + client.client_id + CLIENT_POSTFIX)
+            = client.name
           ol
             each rule in rulesForClient
-              li= rule.ruleName
+              a(href=RULE_BASE_URL + rule.ruleID)
+                li
+                  = rule.ruleName
+        br
