@@ -64,6 +64,11 @@ Anything apart from these simple use cases is not guaranteed to
 work. More possible Rule cases are listed in `/util/test/setup.js`
 under the `rules[X].script` property.
 
+Also note that Rules which are deemed to not "apply" to any clients
+are simply excluded entirely from the UI seen.
+
+Disabled Rules are shown in gray.
+
 # Setup
 - Make sure you're running Node v6.3.0 (`node -v`)
  - If not, you can use [`nvm`](https://github.com/creationix/nvm/blob/master/README.markdown) to install it.
