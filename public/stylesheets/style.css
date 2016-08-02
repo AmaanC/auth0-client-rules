@@ -19,3 +19,8 @@ a:hover {
 a.disabled {
     color: #9E9E9E;
 }
+
+.logoutBtn {
+    position: absolute;
+    right: 30px;
+}
