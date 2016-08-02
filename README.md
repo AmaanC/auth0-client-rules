@@ -14,9 +14,9 @@ A Node.js app which uses Auth0's [Management APIv2](https://auth0.com/docs/api/m
 - Open the `.env` file in any text editor and fill in the values, copying them from the `Settings` tab
  - **Note:** The callback URL you enter here will also need to be updated in the `Settings` tab under **Allowed Callback URLs**
  - For the `AUTH0_APIV2_TOKEN` field, [visit the APIv2 Explorer](https://auth0.com/docs/api/management/v2) to generate your tokens. Make sure you're logged in, and then, in the dropdown, select:
-  - `clients`, `read`, and click the arrow
-  - `rules`, `read`, and click the arrow
-  - Copy and paste the token value ([as seen in this screenshot](http://i.imgur.com/qg01LPO.png)) into the `.env` file
+   - `clients`, `read`, and click the arrow
+   - `rules`, `read`, and click the arrow
+   - Copy and paste the token value ([as seen in this screenshot](http://i.imgur.com/qg01LPO.png)) into the `.env` file
  - [Create a new Rule](https://manage.auth0.com/#/rules/new) for this application to "Whitelist for a Specific App" (and remember to modify the `context.clientName` check to the name you selected for this app, and remember to update the array of whitelisted user emails in the `whitelist` variable.
 - Back on the command line, run `npm start` to start the app. You may want to set an environment variable `PORT` to determine what port the app is hosted on. By default, it will run on [localhost:3000](http://localhost:3000).
 
