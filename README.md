@@ -4,9 +4,12 @@ A Node.js app which uses Auth0's [Management
 APIv2](https://auth0.com/docs/api/management/v2) to list all clients /
 apps and which [rules](https://auth0.com/docs/rules) apply to them.
 
-# Warning
+# Things to know
 
-This project tries to categorize Rules to see which Clients they apply
+This section lists assumptions being made by the project and certain
+points about the functioning of the app.
+
+The project tries to categorize Rules to see which Clients they apply
 to. However, this will only work for simple use-cases, i.e. the Rule
 needs to be a `FunctionDeclaration` of the following form:
 
