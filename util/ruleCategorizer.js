@@ -106,7 +106,6 @@ ruleCategorizer.categorizeClientRules = function(clients, rules) {
 		// code to be able to send us the list of clients, and then
 		// we'll run it
 		s.on('message', function(message) {
-		    console.log('Message', message);
 		    categorizedRuleObj.clients = message;
 		    apiObj.categorized.push(categorizedRuleObj);
 		    resolve();
