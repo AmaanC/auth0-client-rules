@@ -43,6 +43,23 @@ Or
         // the rule applies for all clients _but_ 'Bad App'
     }
 
+Note that to determine which clients apply, the code _actually
+evaluates_ "dependencies".
+For example, the following will only return `"My App"` as a client
+that this Rule applies to:
+
+    function(user, context, callback) {
+        // This setup code is _actually_ evaluated in a sandbox
+        var someBoolean = false;
+        if (someBoolean && context.clientName === 'Some App') {
+            console.log('Special!');
+        }
+        else if (!someBoolean && context.clientName === 'My App') {
+            console.log('Also special!');
+        }
+        return callback(null, user, context);
+    }
+
 Anything apart from these simple use cases is not guaranteed to
 work. More possible Rule cases are listed in `/util/test/setup.js`
 under the `script` property of the `rules` array.
