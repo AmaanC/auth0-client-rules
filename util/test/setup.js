@@ -23,10 +23,14 @@ const clients = [
     }
 ];
 
-    const rules = [
-	{
-	    'id': 'rul_1',
-	    'script': `
+/* An array of made up Rule objects. The `script` is a made up test scenario
+ * and the `applicable` array under it indicates what we expect to see
+ * for that rule, i.e. which clients we'd expect to "apply" to this script.
+ */
+const rules = [
+    {
+	'id': 'rul_1',
+	'script': `
 function(user, context, callback) {
     if (context.clientName === 'Watchamacallit' || context.clientID === 'batman') {
 	console.log('Look at me, mom!');
@@ -34,13 +38,13 @@ function(user, context, callback) {
     }
     return callback(null, user, context);
 }`,
-	    'applicable': [ { clientName: 'User app', clientID: 'batman' },
-			    { clientName: 'Watchamacallit', clientID: 'hunter123' } ],
-	    'name': 'Whitelist for a Specific App',
-	},
-	{
-	    'id': 'rul_2',
-	    'script': `
+	'applicable': [ { clientName: 'User app', clientID: 'batman' },
+			{ clientName: 'Watchamacallit', clientID: 'hunter123' } ],
+	'name': 'Whitelist for a Specific App',
+    },
+    {
+	'id': 'rul_2',
+	'script': `
 function(usr, ctx, cb) {
     if (ctx.clientName === 'Watchamacallit' || ctx.clientID === 'batman') {
 	console.log('Look at me, mom!');
@@ -48,13 +52,13 @@ function(usr, ctx, cb) {
     }
     return cb(null, usr, ctx);
 }`,
-	    'applicable': [ { clientName: 'User app', clientID: 'batman' },
-			    { clientName: 'Watchamacallit', clientID: 'hunter123' } ],
-	    'name': 'Allow Access during weekdays for a specific App',
-	},
-	{
-	    'id': 'rul_3',
-	    'script': `
+	'applicable': [ { clientName: 'User app', clientID: 'batman' },
+			{ clientName: 'Watchamacallit', clientID: 'hunter123' } ],
+	'name': 'Whtielist for a specific App with different param names',
+    },
+    {
+	'id': 'rul_3',
+	'script': `
 function(usr, ctx, cb) {
     var allowed = ['Enterprise App', 'User app'];
     if (allowed.indexOf(ctx.clientName) > -1) {
@@ -62,12 +66,12 @@ function(usr, ctx, cb) {
     }
     return cb(null, usr, ctx);
 }`,
-	    'applicable': [ { clientName: 'User app', clientID: 'batman' } ],
-	    'name': 'Allow Access during weekdays for a specific App'
-	},
-	{
-	    'id': 'rul_4',
-	    'script': `
+	'applicable': [ { clientName: 'User app', clientID: 'batman' } ],
+	'name': 'Allow Access during weekdays for a specific App'
+    },
+    {
+	'id': 'rul_4',
+	'script': `
 function(usr, ctx, cb) {
     var disallowed = ['Watchamacallit', 'User app'];
     if (disallowed.indexOf(ctx.clientName) > -1) {
@@ -76,36 +80,36 @@ function(usr, ctx, cb) {
     console.log('special!');
     return cb(null, usr, ctx);
 }`,
-	    'applicable': [ { clientName: 'Enterprise Special', clientID: 'foobar' } ],
-	    'name': 'Allow Access during weekdays for a specific App'
-	},
-	{
-	    'id': 'rul_5',
-	    'script': `
+	'applicable': [ { clientName: 'Enterprise Special', clientID: 'foobar' } ],
+	'name': 'Allow Access during weekdays for a specific App'
+    },
+    {
+	'id': 'rul_5',
+	'script': `
 function(usr, ctx, cb) {
     sendEmail();
     refreshToken();
     singSong('never gonna give you up! never gonna let you down!');
 }`,
-	    'applicable': [
-		{
-		    "clientID": "foobar",
-		    "clientName": "Enterprise Special"
-		},
-		{
-		    "clientID": "batman",
-		    "clientName": "User app"
-		},
-		{
-		    "clientID": "hunter123",
-		    "clientName": "Watchamacallit"
-		}
-	    ],
-	    'name': 'Rickroll test viewer'
-	},
-	{
-	    'id': 'rul_6',
-	    'script': `
+	'applicable': [
+	    {
+		"clientID": "foobar",
+		"clientName": "Enterprise Special"
+	    },
+	    {
+		"clientID": "batman",
+		"clientName": "User app"
+	    },
+	    {
+		"clientID": "hunter123",
+		"clientName": "Watchamacallit"
+	    }
+	],
+	'name': 'Rickroll People with a global rule'
+    },
+    {
+	'id': 'rul_6',
+	'script': `
 function(usr, ctx, cb) {
     if (ctx['clientName'] === 'Watchamacallit') {
 	console.log('This would be special. But we are only considering');
@@ -116,68 +120,39 @@ function(usr, ctx, cb) {
     }
     return cb(null, usr, ctx);
 }`,
-	    'applicable': [
-		{
-		    "clientID": "foobar",
-		    "clientName": "Enterprise Special"
-		},
-		{
-		    "clientID": "batman",
-		    "clientName": "User app"
-		},
-		{
-		    "clientID": "hunter123",
-		    "clientName": "Watchamacallit"
-		}
-	    ],
-	    'name': 'Rickroll test viewer'
-	},
-	{
-	    'id': 'rul_6',
-	    'script': `
-function(usr, ctx, cb) {
-    if (ctx['clientName'] === 'Watchamacallit') {
-	console.log('This would be special. But we are only considering');
-	console.log('simple use cases, and intentionally fail this.');
-	console.log('Adding this case _would_ be simple, but it would create');
-	console.log('an illusion of the app handling more than just the');
-	console.log('simple typical use-cases.');
+	'applicable': [
+	    {
+		"clientID": "foobar",
+		"clientName": "Enterprise Special"
+	    },
+	    {
+		"clientID": "batman",
+		"clientName": "User app"
+	    },
+	    {
+		"clientID": "hunter123",
+		"clientName": "Watchamacallit"
+	    }
+	],
+	'name': 'Target an app using a StringLiteral'
+    },
+    {
+	'id': 'rul_7',
+	'script': '(usr, ctx, cb) => (cb(null, usr, ctx))',
+	// This rule does _nothing_ special, so it doesn't apply to any
+	// clients. However, the reason it isn't applicable to any is because
+	// it is not a simple use case and is therefore never really parsed.
+	'applicable': [],
+	'name': 'Arrow function callback'
+    },
+    {
+	'id': 'rul_8',
+	'script': '(usr, ctx, cb) => { console.log("Ooh"); return cb(null, usr, ctx) }',
+	// This rule does something special, but it is _not_ a simple use
+	// case, since it uses fat-arrow functions.
+	'applicable': [],
+	'name': 'Arrow function callback'
     }
-    return cb(null, usr, ctx);
-}`,
-	    'applicable': [
-		{
-		    "clientID": "foobar",
-		    "clientName": "Enterprise Special"
-		},
-		{
-		    "clientID": "batman",
-		    "clientName": "User app"
-		},
-		{
-		    "clientID": "hunter123",
-		    "clientName": "Watchamacallit"
-		}
-	    ],
-	    'name': 'Target an app using a StringLiteral'
-	},
-	{
-	    'id': 'rul_7',
-	    'script': '(usr, ctx, cb) => (cb(null, usr, ctx))',
-	    // This rule does _nothing_ special, so it doesn't apply to any
-	    // clients. However, the reason it isn't applicable to any is because
-	    // it is not a simple use case and is therefore never really parsed.
-	    'applicable': [],
-	    'name': 'Arrow function callback'
-	},
-	{
-	    'id': 'rul_8',
-	    'script': '(usr, ctx, cb) => { console.log("Ooh"); return cb(null, usr, ctx) }',
-	    // This rule does something special, but it is _not_ a simple use
-	    // case, since it uses fat-arrow functions.
-	    'applicable': [],
-	    'name': 'Arrow function callback'
-	}
-    ];
+];
 
-    module.exports = { clients, rules };
+module.exports = { clients, rules };
