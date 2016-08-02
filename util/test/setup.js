@@ -152,6 +152,50 @@ function(usr, ctx, cb) {
 	// case, since it uses fat-arrow functions.
 	'applicable': [],
 	'name': 'Arrow function callback'
+    },
+    {
+	'id': 'rul_9',
+	'script': `
+function(user, context, callback) {
+    var someBoolean = true;
+    if (someBoolean && context.clientName === 'Watchamacallit') {
+	console.log('Special!');
+    }
+    else if (!someBoolean && context.clientName === 'User app') {
+	console.log('Also special!');
+    }
+    return callback(null, user, context);
+}
+`,
+	'applicable': [
+	    {
+		"clientID": "hunter123",
+		"clientName": "Watchamacallit"
+	    }
+	],
+	'name': 'Applicable client depends on variable'
+    },
+    {
+	'id': 'rul_10',
+	'script': `
+function(user, context, callback) {
+    var someBoolean = false;
+    if (someBoolean && context.clientName === 'Watchamacallit') {
+	console.log('Special!');
+    }
+    else if (!someBoolean && context.clientName === 'User app') {
+	console.log('Also special!');
+    }
+    return callback(null, user, context);
+}
+`,
+	'applicable': [
+	    {
+		"clientID": "batman",
+		"clientName": "User app"
+	    }
+	],
+	'name': 'Arrow function callback'
     }
 ];
 
