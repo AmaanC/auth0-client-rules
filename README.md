@@ -76,3 +76,7 @@ On a high-level, the way this works is as follows:
 - All the results are aggregated and categorized, and shown to the user.
 - ???
 - Profit!
+
+# Screenshot
+
+![Screenshot of the app](http://i.imgur.com/3DlPexN.png)
