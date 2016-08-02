@@ -38,10 +38,19 @@ router.get('/logout', function(req, res){
 });
 
 router.get('/callback',
-	         passport.authenticate('auth0', { failureRedirect: '/login' }),
+	         passport.authenticate('auth0', { failureRedirect: '/error' }),
 	         function(req, res) {
 	             res.redirect(req.session.returnTo || '/user');
 	         });
 
+router.get('/error', function(req, res) {
+    res.render('error', {
+	message: 'Login error. Your email may need to be whitelisted.',
+	error: {
+	    status: '',
+	    stack: ''
+	}
+    });
+});
 
 module.exports = router;
