@@ -6,7 +6,8 @@
   "author": "Amaan Cheval",
   "license": "MIT",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha util"
   },
   "dependencies": {
     "auth0": "^2.3.1",
