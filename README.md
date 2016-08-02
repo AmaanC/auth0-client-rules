@@ -62,7 +62,7 @@ that this Rule applies to:
 
 Anything apart from these simple use cases is not guaranteed to
 work. More possible Rule cases are listed in `/util/test/setup.js`
-under the `rules[X].script`.
+under the `rules[X].script` property.
 
 # Setup
 - Make sure you're running Node v6.3.0 (`node -v`)
