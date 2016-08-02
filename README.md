@@ -14,8 +14,9 @@ needs to be a `FunctionDeclaration` of the following form:
         // Your code here
     }
 
-As seen, the parameters names _can_ change. However, you cannot use,
-for example, a fat-arrow function expression.
+As seen, the parameters names _can_ change (from the default `user,
+context, callback`). However, you **cannot** use, for example, a fat-arrow
+function expression.
 
 Furthermore, Rules will only be detected as applying to certain
 clients correctly for simple use-cases such as:
