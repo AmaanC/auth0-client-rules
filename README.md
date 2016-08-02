@@ -1,5 +1,50 @@
 # auth0-client-rules
-A Node.js app which uses Auth0's [Management APIv2](https://auth0.com/docs/api/management/v2) to list all clients / apps and which [rules](https://auth0.com/docs/rules) apply to them.
+
+A Node.js app which uses Auth0's [Management
+APIv2](https://auth0.com/docs/api/management/v2) to list all clients /
+apps and which [rules](https://auth0.com/docs/rules) apply to them.
+
+# Warning
+
+This project tries to categorize Rules to see which Clients they apply
+to. However, this will only work for simple use-cases, i.e. the Rule
+needs to be a `FunctionDeclaration` of the following form:
+
+    function(userParam, ctxParam, callbackParam) {
+        // Your code here
+    }
+
+As seen, the parameters names _can_ change. However, you cannot use,
+for example, a fat-arrow function expression.
+
+Furthermore, Rules will only be detected as applying to certain
+clients correctly for simple use-cases such as:
+
+    function(user, context, callback) {
+        // Some setup code here, such as:
+        var allowedClients = ['My App', 'Other App'];
+        if (allowedClients.indexOf(context.clientName) > -1) {
+            // My specific code here
+        }
+        return callback(null, user, context);
+    }
+
+Or
+
+    function(user, context, callback) {
+        // Some setup code here, such as:
+        var disallowedClients = ['Bad App'];
+        if (disallowedClients.indexOf(context.clientName) > -1) {
+            return callback(null, user, context);
+        }
+        // Code for all clients other than 'Bad App'
+        // Note that in this case, our categorizer would determine that
+        // the rule applies for all clients _but_ 'Bad App'
+    }
+
+Anything apart from these simple use cases is not guaranteed to
+work. More possible Rule cases are listed in `/util/test/setup.js`
+under the `script` property of the `rules` array.
 
 # Setup
 - Make sure you're running Node v6.3.0 (`node -v`)
